@@ -100,16 +100,19 @@ def readSampleFile(fileName):
 
     return samples, infos
 
-def getSamples(bams, runOnly=-1):
-    samples = []
+def getSamples(bams1, bams2, runOnly=-1):
+    fsamples = []
+    rsamples = []
     samplesInfos = []
-    if len(bams) == 1 and (bams[0].endswith(".tsv") or bams[0].endswith(".csv")):
+    if len(bams1) == 1 and (bams1[0].endswith(".tsv") or bams1[0].endswith(".csv")):
         # Sample file specified
-        samples, samplesInfos = readSampleFile(bams[0])
+        fsamples, samplesInfos = readSampleFile(bams1[0])
+        rsamples = bams2
     else:
         # List of BAM files specified
-        samples = bams
-        samplesInfos = [""] * len(samples)
+        fsamples = bams1
+        rsamples = bams2
+        samplesInfos = [""] * len(fsamples)
 
     if(runOnly > 0):
         if(runOnly > len(samples)):
@@ -120,7 +123,7 @@ def getSamples(bams, runOnly=-1):
     elif(runOnly == 0):
         raise RuntimeError("Sample index (" + str(runOnly) + ") out of range. Starts with 1. Check -i/--sample-index")
 
-    return samples, samplesInfos
+    return fsample, rsample, samplesInfos
 
 def runMap(tid, inputBAMrun1, inputBAMrun2, referenceFile, threads, trim5p, maxPolyA, quantseqMapping, endtoendMapping, topn, sampleDescription, outputDirectory, skipSAM) :
     if skipSAM:
