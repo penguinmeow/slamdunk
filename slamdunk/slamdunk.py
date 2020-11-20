@@ -115,10 +115,11 @@ def getSamples(bams1, bams2, runOnly=-1):
         samplesInfos = [""] * len(fsamples)
 
     if(runOnly > 0):
-        if(runOnly > len(samples)):
-            raise RuntimeError("Sample index out of range. " + str(runOnly) + " > " + str(len(samples)) + ". Check -i/--sample-index")
+        if(runOnly > len(fsamples)):
+            raise RuntimeError("Sample index out of range. " + str(runOnly) + " > " + str(len(fsamples)) + ". Check -i/--sample-index")
         message("Running only job " + str(runOnly))
-        samples = [ samples[runOnly - 1] ]
+        fsamples = [ fsamples[runOnly - 1] ]
+        rsamples = [ rsamples[runOnly - 1] ]
         samplesInfos = [ samplesInfos[runOnly - 1] ]
     elif(runOnly == 0):
         raise RuntimeError("Sample index (" + str(runOnly) + ") out of range. Starts with 1. Check -i/--sample-index")
