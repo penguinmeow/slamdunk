@@ -224,7 +224,7 @@ def runAll(args) :
     dunkPath = os.path.join(outputDirectory, "map")
     createDir(dunkPath)
 
-    samples, samplesInfos = getSamples(args.files, runOnly=args.sampleIndex)
+    fsamples, rsamples, samplesInfos = getSamples(args.forward_files, args.reverse_files, runOnly=args.sampleIndex)
 
     message("Running slamDunk map for " + str(len(samples)) + " files (" + str(n) + " threads)")
 
@@ -453,7 +453,7 @@ def run():
         n = args.threads
         referenceFile = args.referenceFile
 
-        samples, samplesInfos = getSamples(args.files, runOnly=args.sampleIndex)
+        fsamples,rsamples, samplesInfos = getSamples(args.forward_files,args.reverse_files, runOnly=args.sampleIndex)
 
         message("Running slamDunk map for " + str(len(samples)) + " files (" + str(n) + " threads)")
         for i in range(0, len(samples)):
