@@ -229,10 +229,11 @@ def runAll(args) :
     message("Running slamDunk map for " + str(len(fsamples)) + " files (" + str(n) + " threads)")
 
     for i in range(0, len(fsamples)):
-        bam = fsamples[i]
+        bamf = fsamples[i]
+        bamr = rsamples[i]
 
         if not args.sampleName or len(fsamples) > 1:
-            sampleName = replaceExtension(basename(bam), "", "")
+            sampleName = replaceExtension(basename(bamf), "", "")
         else :
             sampleName = args.sampleName
 
@@ -242,18 +243,18 @@ def runAll(args) :
         tid = i
         if args.sampleIndex > -1:
             tid = args.sampleIndex
-        runMap(tid, bam, referenceFile, n, args.trim5, args.maxPolyA, args.quantseq, args.endtoend, args.topn, sampleInfo, dunkPath, args.skipSAM)
+        runMap(tid, bamf, bamr, referenceFile, n, args.trim5, args.maxPolyA, args.quantseq, args.endtoend, args.topn, sampleInfo, dunkPath, args.skipSAM)
 
     dunkFinished()
 
     if(not args.skipSAM):
-        message("Running slamDunk sam2bam for " + str(len(samples)) + " files (" + str(n) + " threads)")
-        results = Parallel(n_jobs=1, verbose=verbose)(delayed(runSam2Bam)(tid, samples[tid], n, dunkPath) for tid in range(0, len(samples)))
+        message("Running slamDunk sam2bam for " + str(len(samplesf)) + " files (" + str(n) + " threads)")
+        results = Parallel(n_jobs=1, verbose=verbose)(delayed(runSam2Bam)(tid, fsamples[tid], n, dunkPath) for tid in range(0, len(fsamples)))
         dunkFinished()
 
     dunkbufferIn = []
 
-    for file in samples :
+    for file in fsamples :
         dunkbufferIn.append(os.path.join(dunkPath, replaceExtension(basename(file), ".bam", "_slamdunk_mapped")))
 
     # Run filter dunk
@@ -455,12 +456,13 @@ def run():
 
         fsamples,rsamples, samplesInfos = getSamples(args.forward_files,args.reverse_files, runOnly=args.sampleIndex)
 
-        message("Running slamDunk map for " + str(len(samples)) + " files (" + str(n) + " threads)")
-        for i in range(0, len(samples)):
-            bam = samples[i]
+        message("Running slamDunk map for " + str(len(fsamples)) + " files (" + str(n) + " threads)")
+        for i in range(0, len(fsamples)):
+            bamf = fsamples[i]
+            bamr = rsamples[i]
 
-            if not args.sampleName or len(samples) > 1:
-                sampleName = replaceExtension(basename(bam), "", "")
+            if not args.sampleName or len(fsamples) > 1:
+                sampleName = replaceExtension(basename(bamf), "", "")
             else :
                 sampleName = args.sampleName
 
@@ -470,7 +472,7 @@ def run():
             tid = i
             if args.sampleIndex > -1:
                 tid = args.sampleIndex
-            runMap(tid, bam, referenceFile, n, args.trim5, args.maxPolyA, args.quantseq, args.endtoend, args.topn, sampleInfo, outputDirectory, args.skipSAM)
+            runMap(tid, bamf, bamr, referenceFile, n, args.trim5, args.maxPolyA, args.quantseq, args.endtoend, args.topn, sampleInfo, outputDirectory, args.skipSAM)
 
         dunkFinished()
 
