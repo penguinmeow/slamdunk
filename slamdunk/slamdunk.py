@@ -122,15 +122,15 @@ def getSamples(bams, runOnly=-1):
 
     return samples, samplesInfos
 
-def runMap(tid, inputBAM, referenceFile, threads, trim5p, maxPolyA, quantseqMapping, endtoendMapping, topn, sampleDescription, outputDirectory, skipSAM) :
+def runMap(tid, inputBAMrun1, inputBAMrun2, referenceFile, threads, trim5p, maxPolyA, quantseqMapping, endtoendMapping, topn, sampleDescription, outputDirectory, skipSAM) :
     if skipSAM:
-        outputSAM = os.path.join(outputDirectory, replaceExtension(basename(inputBAM), ".bam", "_slamdunk_mapped"))
+        outputSAM = os.path.join(outputDirectory, replaceExtension(basename(inputBAMrun1), ".bam", "_slamdunk_mapped"))
     else:
-        outputSAM = os.path.join(outputDirectory, replaceExtension(basename(inputBAM), ".sam", "_slamdunk_mapped"))
-    outputLOG = os.path.join(outputDirectory, replaceExtension(basename(inputBAM), ".log", "_slamdunk_mapped"))
+        outputSAM = os.path.join(outputDirectory, replaceExtension(basename(inputBAMrun1), ".sam", "_slamdunk_mapped"))
+    outputLOG = os.path.join(outputDirectory, replaceExtension(basename(inputBAMrun1), ".log", "_slamdunk_mapped"))
 
     #sampleName = "sample_" + str(tid)
-    sampleName = replaceExtension(basename(inputBAM), ".bam", "")
+    sampleName = replaceExtension(basename(inputBAMrun1), ".bam", "")
     sampleType = "NA"
     sampleTime = "-1"
     if(sampleDescription != ""):
@@ -146,7 +146,7 @@ def runMap(tid, inputBAM, referenceFile, threads, trim5p, maxPolyA, quantseqMapp
         if(len(sampleDescriptions) >= 3):
             sampleTime = sampleDescriptions[2]
 
-    mapper.Map(inputBAM, referenceFile, outputSAM, getLogFile(outputLOG), quantseqMapping, endtoendMapping, threads=threads, trim5p=trim5p, maxPolyA=maxPolyA, topn=topn, sampleId=tid, sampleName=sampleName, sampleType=sampleType, sampleTime=sampleTime, printOnly=printOnly, verbose=verbose)
+    mapper.Map(inputBAMrun1, inputBAMrun2, referenceFile, outputSAM, getLogFile(outputLOG), quantseqMapping, endtoendMapping, threads=threads, trim5p=trim5p, maxPolyA=maxPolyA, topn=topn, sampleId=tid, sampleName=sampleName, sampleType=sampleType, sampleTime=sampleTime, printOnly=printOnly, verbose=verbose)
     stepFinished()
 
 def runSam2Bam(tid, bam, threads, outputDirectory):
@@ -226,12 +226,12 @@ def runAll(args) :
 
     fsamples, rsamples, samplesInfos = getSamples(args.forward_files, args.reverse_files, runOnly=args.sampleIndex)
 
-    message("Running slamDunk map for " + str(len(samples)) + " files (" + str(n) + " threads)")
+    message("Running slamDunk map for " + str(len(fsamples)) + " files (" + str(n) + " threads)")
 
-    for i in range(0, len(samples)):
-        bam = samples[i]
+    for i in range(0, len(fsamples)):
+        bam = fsamples[i]
 
-        if not args.sampleName or len(samples) > 1:
+        if not args.sampleName or len(fsamples) > 1:
             sampleName = replaceExtension(basename(bam), "", "")
         else :
             sampleName = args.sampleName
