@@ -352,8 +352,8 @@ def run():
     # map command
 
     mapparser = subparsers.add_parser('map', help='Map SLAM-seq read data', formatter_class=ArgumentDefaultsHelpFormatter)
-    mapparser.add_argument('forward', action='store', help='Single csv/tsv file (recommended) containing all sample forward files and sample info or a list of all sample forward BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
-    mapparser.add_argument('reverse', action='store', help='Single csv/tsv file (recommended) containing all sample reverse files and sample info or a list of all sample reverse BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
+    mapparser.add_argument("-forward", action='store', help='Single csv/tsv file (recommended) containing all sample forward files and sample info or a list of all sample forward BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
+    mapparser.add_argument("-reverse", action='store', help='Single csv/tsv file (recommended) containing all sample reverse files and sample info or a list of all sample reverse BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
     mapparser.add_argument("-r", "--reference", type=str, required=True, dest="referenceFile", default=SUPPRESS, help="Reference fasta file")
     mapparser.add_argument("-o", "--outputDir", type=str, required=True, dest="outputDir", default=SUPPRESS, help="Output directory for mapped BAM files.")
     mapparser.add_argument("-5", "--trim-5p", type=int, required=False, dest="trim5", default=12, help="Number of bp removed from 5' end of all reads.")
@@ -408,8 +408,8 @@ def run():
     # all command
 
     allparser = subparsers.add_parser('all', help='Run entire SLAMdunk analysis')
-    allparser.add_argument('forward', action='store', help='Single csv/tsv file (recommended) containing all sample forward files and sample info or a list of all sample forward BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
-    allparser.add_argument('reverse', action='store', help='Single csv/tsv file (recommended) containing all sample reverse files and sample info or a list of all sample reverse BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
+    allparser.add_argument("-forward", action='store', help='Single csv/tsv file (recommended) containing all sample forward files and sample info or a list of all sample forward BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
+    allparser.add_argument("-reverse", action='store', help='Single csv/tsv file (recommended) containing all sample reverse files and sample info or a list of all sample reverse BAM/FASTA(gz)/FASTQ(gz) files' , nargs="+")
     allparser.add_argument("-r", "--reference", type=str, required=True, dest="referenceFile", help="Reference fasta file")
     allparser.add_argument("-b", "--bed", type=str, required=True, dest="bed", help="BED file with 3'UTR coordinates")
     allparser.add_argument("-fb", "--filterbed", type=str, required=False, dest="filterbed", help="BED file with 3'UTR coordinates to filter multimappers (activates -m)")
