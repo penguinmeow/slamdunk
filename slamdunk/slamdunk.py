@@ -124,7 +124,7 @@ def getSamples(bams1, bams2, runOnly=-1):
     elif(runOnly == 0):
         raise RuntimeError("Sample index (" + str(runOnly) + ") out of range. Starts with 1. Check -i/--sample-index")
 
-    return fsample, rsample, samplesInfos
+    return fsamples, rsamples, samplesInfos
 
 def runMap(tid, inputBAMrun1, inputBAMrun2, referenceFile, threads, trim5p, maxPolyA, quantseqMapping, endtoendMapping, topn, sampleDescription, outputDirectory, skipSAM) :
     if skipSAM:
@@ -252,7 +252,7 @@ def runAll(args) :
     dunkFinished()
 
     if(not args.skipSAM):
-        message("Running slamDunk sam2bam for " + str(len(samplesf)) + " files (" + str(n) + " threads)")
+        message("Running slamDunk sam2bam for " + str(len(fsamples)) + " files (" + str(n) + " threads)")
         results = Parallel(n_jobs=1, verbose=verbose)(delayed(runSam2Bam)(tid, fsamples[tid], n, dunkPath) for tid in range(0, len(fsamples)))
         dunkFinished()
 
